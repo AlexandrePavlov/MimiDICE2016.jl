@@ -70,8 +70,7 @@ end #MimiDICE2016-model testset
 
 
 #------------------------------------------------------------------------------
-#   2. Run tests to make sure integration version (Mimi v0.5.0)
-#   values match Mimi 0.4.0 values
+#   2. Run tests to validate values
 #------------------------------------------------------------------------------
 
 @testset "MimiDICE2016-integration" begin
@@ -85,7 +84,7 @@ run(m)
 for c in map(name, Mimi.compdefs(m)), v in Mimi.variable_names(m, c)
 
     #load data for comparison
-    filepath = joinpath(@__DIR__, "../data/validation_data/$c-$v.csv")
+    filepath = joinpath(@__DIR__, "../data/validation_data/$(c)_$(v).csv")
     results = m[c, v]
 
     df = load(filepath) |> DataFrame
@@ -105,7 +104,6 @@ for c in map(name, Mimi.compdefs(m)), v in Mimi.variable_names(m, c)
         if size(validation_results,1) == 1
             validation_results = validation_results'
         end
-
     end
     @test results ≈ validation_results atol = Precision
 
