@@ -2,10 +2,10 @@ using Test
 using ExcelReaders
 using DataFrames
 using Mimi
-using .MimiDICE2016
+using MimiDICE2016
 using CSVFiles
 
-using .MimiDICE2016: getparams
+using MimiDICE2016: getparams
 
 @testset "MimiDICE2016" begin
 
