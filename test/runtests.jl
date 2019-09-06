@@ -68,48 +68,9 @@ True_UTILITY = getparams(f, "B129:B129", :single, "Base", T);
 
 end #MimiDICE2016-model testset
 
-
 #------------------------------------------------------------------------------
-#   2. Run tests to validate values
+#   1. Run tests on SCC
 #------------------------------------------------------------------------------
-
-@testset "MimiDICE2016-integration" begin
-
-Precision = 1.0e-11
-nullvalue = -999.999
-
-m = MimiDICE2016.get_model();
-run(m)
-
-for c in map(name, Mimi.compdefs(m)), v in Mimi.variable_names(m, c)
-
-    #load data for comparison
-    filepath = joinpath(@__DIR__, "../data/validation_data/$(c)_$(v).csv")
-    results = m[c, v]
-
-    df = load(filepath) |> DataFrame
-    if typeof(results) <: Number
-        validation_results = df[1,1]
-
-    else
-        validation_results = convert(Matrix, df)
-
-        #remove NaNs and Missings
-        results[ismissing.(results)] .= nullvalue
-        results[isnan.(results)] .= nullvalue
-        validation_results[ismissing.(validation_results)] .= nullvalue
-        validation_results[isnan.(validation_results)] .= nullvalue
-
-        #match dimensions
-        if size(validation_results,1) == 1
-            validation_results = validation_results'
-        end
-    end
-    @test results ≈ validation_results atol = Precision
-
-end #for loop
-
-end #MimiDICE2016-integration testset
 
 @testset "Standard API" begin
 
