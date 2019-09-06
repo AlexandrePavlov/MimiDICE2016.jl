@@ -21,7 +21,7 @@ run(m)
 f = openxl(joinpath(@__DIR__, "../data/DICE2016R-090916ap-v2.xlsm"))
 
 #Test Precision
-Precision = 1.0e-11
+Precision = 1.0e-10
 
 #Time Periods
 T=100
