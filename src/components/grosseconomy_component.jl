@@ -15,9 +15,11 @@
 
     function run_timestep(p, v, d, t)
 		#Define function for GA
-		for tm = 1:100
-			v.GA[tm] = p.ga0 * exp(-p.dela * 5 * (tm-1))
-		end
+        if is_first(t)
+            v.GA[t] = p.ga0
+        else
+            v.GA[t] = v.GA[t - 1] * exp(-p.dela * 5)
+        end
 		
 		#Define function for AL
 		if is_first(t)

@@ -41,8 +41,10 @@
 		v.EIND[t] = v.SIGMA[t] * p.YGROSS[t] * (1 - p.MIU[t])
     		
 		#Define function for ETREE
-		for tm = 1:100
-			v.ETREE[tm] = p.eland0 * (1 - p.deland) ^ (tm - 1)
+		if is_first(t)
+			v.ETREE[t] = p.eland0
+		else
+			v.ETREE[t] = v.ETREE[t - 1] * (1 - p.deland)
 		end
 
         #Define function for E
