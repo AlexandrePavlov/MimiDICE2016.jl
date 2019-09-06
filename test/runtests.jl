@@ -18,10 +18,10 @@ using MimiDICE2016: getparams
 m = MimiDICE2016.get_model();
 run(m)
 
-f = openxl(joinpath(dirname(@__FILE__), "..", "data", "DICE2016R.xlsm"))
+f = openxl(joinpath(@__DIR__, "../data/DICE2016R-090916ap-v2.xlsm"))
 
 #Test Precision
-Precision = 1.0e-11
+Precision = 1.0e-10
 
 #Time Periods
 T=100
@@ -69,7 +69,7 @@ True_UTILITY = getparams(f, "B129:B129", :single, "Base", T);
 end #MimiDICE2016-model testset
 
 #------------------------------------------------------------------------------
-#   1. Run tests on SCC
+#   2. Run tests on SCC
 #------------------------------------------------------------------------------
 
 @testset "Standard API" begin

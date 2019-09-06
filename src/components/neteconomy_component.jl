@@ -23,9 +23,11 @@
 
     function run_timestep(p, v, d, t)
 		#Define function for PBACKTIME
-		for tm = 1:100
-			v.PBACKTIME[tm] = p.pback * (1 - p.gback) ^ (tm - 1)
-		end
+        if is_first(t)
+            v.PBACKTIME[t] = p.pback
+        else
+            v.PBACKTIME[t] = v.PBACKTIME[t - 1] * (1 - p.gback)
+        end
 		
 		#Define function for COSTL
 		v.COST1[t] = v.PBACKTIME[t] * p.SIGMA[t] / p.expcost2 / 1000
