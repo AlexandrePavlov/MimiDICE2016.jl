@@ -8,6 +8,7 @@ include("parameters.jl")
 
 include("marginaldamage.jl")
 
+include("components/totalfactorproductivity_component.jl")
 include("components/grosseconomy_component.jl")
 include("components/emissions_component.jl")
 include("components/co2cycle_component.jl")
@@ -26,6 +27,7 @@ function constructdice(p)
     m = Model()
     set_dimension!(m, :time, model_years)
 
+    add_comp!(m, totalfactorproductivity, :totalfactorproductivity)
     add_comp!(m, grosseconomy, :grosseconomy)
     add_comp!(m, emissions, :emissions)
     add_comp!(m, co2cycle, :co2cycle)
@@ -35,16 +37,18 @@ function constructdice(p)
     add_comp!(m, neteconomy, :neteconomy)
     add_comp!(m, welfare, :welfare)
 
+    # TFP COMPONENT
+    set_param!(m, :totalfactorproductivity, :a0, p[:a0])
+	set_param!(m, :totalfactorproductivity, :ga0, p[:ga0])
+    set_param!(m, :totalfactorproductivity, :dela, p[:dela])
+    
     # GROSS ECONOMY COMPONENT
-    set_param!(m, :grosseconomy, :a0, p[:a0])
-	set_param!(m, :grosseconomy, :ga0, p[:ga0])
-	set_param!(m, :grosseconomy, :dela, p[:dela])
     set_param!(m, :grosseconomy, :l, p[:l])
     set_param!(m, :grosseconomy, :gama, p[:gama])
     set_param!(m, :grosseconomy, :dk, p[:dk])
     set_param!(m, :grosseconomy, :k0, p[:k0])
 
-    # Note: offset=1 => dependence is on on prior timestep, i.e., not a cycle
+    connect_param!(m, :grosseconomy, :AL, :totalfactorproductivity, :AL)
     connect_param!(m, :grosseconomy, :I, :neteconomy, :I)
 
     # EMISSIONS COMPONENT
