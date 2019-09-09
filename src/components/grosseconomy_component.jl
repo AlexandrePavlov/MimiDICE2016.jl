@@ -2,7 +2,7 @@
     K       = Variable(index=[time])    #Capital stock (trillions 2010 US dollars)
     YGROSS  = Variable(index=[time])    #Gross world product GROSS of abatement and damages (trillions 2010 USD per year)
 
-    AL      = Parameter(index=[time])
+    AL      = Parameter(index=[time])   #Level of total factor productivity
     I       = Parameter(index=[time])   #Investment (trillions 2010 USD per year)
     l       = Parameter(index=[time])   #Level of population and labor
     dk      = Parameter()               #Depreciation rate on capital (per year)
