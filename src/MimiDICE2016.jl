@@ -2,6 +2,7 @@ module MimiDICE2016
 
 using Mimi
 using ExcelReaders
+using Distributions
 
 include("helpers.jl")
 include("parameters.jl")
@@ -17,6 +18,8 @@ include("components/climatedynamics_component.jl")
 include("components/damages_component.jl")
 include("components/neteconomy_component.jl")
 include("components/welfare_component.jl")
+
+include("mcs.jl")
 
 export constructdice, getdiceexcel, getdicegams
 

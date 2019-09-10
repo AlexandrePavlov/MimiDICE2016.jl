@@ -115,6 +115,14 @@ marginal_temp = result.mm[:climatedynamics, :TATM]
 
 end
 
+#------------------------------------------------------------------------------
+#   3. Test the Monte Carlo Simulation
+#------------------------------------------------------------------------------
+
+m = MimiDICE2016.get_model()
+mcs = MimiDICE2016.get_mcs()
+sim_inst = run(mcs, m, 1000)
+
 end #MimiDICE2016 testset
 
 nothing
