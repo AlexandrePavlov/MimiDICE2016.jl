@@ -39,7 +39,7 @@ function _compute_scc(mm::MarginalModel; year::Int, last_year::Int, prtp::Float6
     ntimesteps = findfirst(isequal(last_year), model_years)     # Will run through the timestep of the specified last_year 
     run(mm, ntimesteps=ntimesteps)
 
-    marginal_damages = -1 * mm[:neteconomy, :C][1:ntimesteps] * 10^12     # Go from trillion$ to $; multiply by -1 so that damages are positive; pulse was in CO2 so we don't need to multiply by 12/44
+    marginal_damages = -1 * mm[:neteconomy, :C][1:ntimesteps] * 1e12     # Go from trillion$ to $; multiply by -1 so that damages are positive; pulse was in CO2 so we don't need to multiply by 12/44
 
     cpc = mm.base[:neteconomy, :CPC]
 
