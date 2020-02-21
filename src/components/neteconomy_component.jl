@@ -33,7 +33,7 @@
 		v.COST1[t] = v.PBACKTIME[t] * p.SIGMA[t] / p.expcost2 / 1000
 		
         #Define function for YNET
-        v.YNET[t] = p.YGROSS[t] - p.DAMAGES[t]
+        v.YNET[t] = max(p.YGROSS[t] - p.DAMAGES[t], 0)
     
         #Define function for ABATECOST
         v.ABATECOST[t] = p.YGROSS[t] * v.COST1[t] * (p.MIU[t]^p.expcost2)
@@ -45,13 +45,13 @@
         v.Y[t] = v.YNET[t] - v.ABATECOST[t]
     
         #Define function for I
-        v.I[t] = p.S[t] * v.Y[t]
+        v.I[t] = max(p.S[t] * v.Y[t], 0)
     
         #Define function for C
-        v.C[t] = v.Y[t] - v.I[t]
+        v.C[t] = max(v.Y[t] - v.I[t], 0)
     
         #Define function for CPC
-        v.CPC[t] = 1000 * v.C[t] / p.l[t]
+        v.CPC[t] = max(1000 * v.C[t] / p.l[t], 0)
     
         #Define function for CPRICE (equation from GAMS version of DICE2016)
         v.CPRICE[t] = v.PBACKTIME[t] * (p.MIU[t]^(p.expcost2 - 1))
