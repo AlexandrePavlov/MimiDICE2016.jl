@@ -12,6 +12,14 @@ _default_save = [
     :damages => :DAMFRAC
 ]
 
+_default_simdef = @defsim begin
+    t2xco2 = LogNormal(1.106, 0.2646)       # Equilibrium climate sensitivity
+    ga0 = Normal(0.076, 0.056)              # Initial TFP
+    gsigma1 = Normal(-0.0152, 0.0032)       # initial decline in sigma
+    mueq = LogNormal(5.851, 0.2649)         # Carbon coefficient
+    a2 = Normal(0.00227, 0.001135)          # Damage coefficient
+end
+
 """
     get_mcs(; save::Vector{Pair{Symbol, Symbol}} = _default_save)
 
@@ -19,13 +27,7 @@ Returns a Mimi Simulation Definition with the default random variables for DICE2
 List of saved output variables can be modified with the `save` keyword.
 """
 function get_mcs(; save::Vector{Pair{Symbol, Symbol}} = _default_save)
-    mcs = @defsim begin
-        t2xco2 = LogNormal(1.106, 0.2646)
-        ga0 = Normal(0.076, 0.056)
-        gsigma1 = Normal(-0.0152, 0.0032)
-        mueq = LogNormal(5.851, 0.2649)
-        a2 = Normal(0.00227, 0.001135)
-    end
+    mcs = deepcopy(_default_simdef)
 
     for (comp, var) in save
         Mimi.addSave!(mcs, comp, var)
