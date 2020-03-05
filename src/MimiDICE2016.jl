@@ -55,6 +55,7 @@ function constructdice(p)
     connect_param!(m, :grosseconomy, :I, :neteconomy, :I)
 
     # EMISSIONS COMPONENT
+    set_param!(m, :emissions, :sig0, p[:sig0])
     set_param!(m, :emissions, :gsigma1, p[:gsigma1])
     set_param!(m, :emissions, :dsig, p[:dsig])
 	set_param!(m, :emissions, :eland0, p[:eland0])

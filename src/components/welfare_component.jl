@@ -22,10 +22,8 @@
         v.CUMCEMUTOTPER[t] = v.CEMUTOTPER[t] + (!is_first(t) ? v.CUMCEMUTOTPER[t-1] : 0)
 
         # Define function for UTILITY
-        if t.t == 100
+        if is_last(t)
             v.UTILITY = 5 * p.scale1 * v.CUMCEMUTOTPER[t] + p.scale2
-
-            utility = 5 * p.scale1 * v.CUMCEMUTOTPER[t] + p.scale2
         end
     end
 end
