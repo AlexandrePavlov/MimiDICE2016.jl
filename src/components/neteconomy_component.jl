@@ -61,10 +61,10 @@
         v.I[t] = p.S[t] * v.Y[t]
     
         #Define function for C
-        v.C[t] = v.Y[t] - v.I[t]
+        v.C[t] = max(v.Y[t] - v.I[t], 2)
     
         #Define function for CPC
-        v.CPC[t] = 1000 * v.C[t] / p.l[t]
+        v.CPC[t] = max(1000 * v.C[t] / p.l[t], 0.01)
     
         #Define function for CPRICE (equation from GAMS version of DICE2016)
         v.CPRICE[t] = v.PBACKTIME[t] * (p.MIU[t]^(p.expcost2 - 1))

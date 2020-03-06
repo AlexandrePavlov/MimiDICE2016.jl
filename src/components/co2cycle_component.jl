@@ -38,7 +38,7 @@
         if is_first(t)
             v.MAT[t] = p.mat0
         else
-            v.MAT[t] = max(v.MAT[t-1] * v.b11 + v.MU[t-1] * v.b21 + (p.E[t-1]*(5/3.666)), 0)
+            v.MAT[t] = max(v.MAT[t-1] * v.b11 + v.MU[t-1] * v.b21 + (p.E[t-1]*(5/3.666)), 10)
         end
 
         #Define function for MU

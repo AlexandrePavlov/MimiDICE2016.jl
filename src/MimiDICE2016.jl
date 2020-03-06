@@ -1,8 +1,9 @@
 module MimiDICE2016
 
-using Mimi
-using ExcelReaders
 using Distributions
+using ExcelReaders
+using Mimi
+using Random
 
 include("helpers.jl")
 include("parameters.jl")

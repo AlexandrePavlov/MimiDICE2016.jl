@@ -1,53 +1,134 @@
 """
-compute_scc(m::Model=get_model(); year::Int = nothing, last_year::Int = 2510), prtp::Float64 = 0.03)
+    compute_scc(m::Model=get_model(); 
+        year::Union{Int, Nothing} = nothing, 
+        last_year::Int = model_years[end], 
+        prtp::Float64 = 0.015, 
+        eta::Float64=1.45, 
+        n::Union{Int, Nothing}=nothing, 
+        seed::Union{Int, Nothing}=nothing, 
+        trials_output_filename::Union{String, Nothing}=nothing)
 
 Computes the social cost of CO2 for an emissions pulse in `year` for the provided MimiDICE2016 model. 
 If no model is provided, the default model from MimiDICE2016.get_model() is used.
-Constant discounting is used from the specified pure rate of time preference `prtp`.
+
+The discounting scheme can be specified by the `eta` and `prtp` parameters. If no values are provided, default
+values of 1.45 and 0.015 will be used.
+
+By default, `n = nothing`, and a single value for the "best guess" social cost of CO2 is returned. If a positive 
+value for keyword `n` is specified, then a Monte Carlo simulation with sample size `n` will run, sampling from 
+all of DICE2016's random variables, and a vector of `n` social cost values will be returned.
+Optionally providing a CSV file path to `trials_output_filename` will save all of the sampled trial data as a CSV file.
+Optionally providing a `seed` value will set the random seed before running the simulation, allowing the 
+results to be replicated.
 """
-function compute_scc(m::Model=get_model(); year::Union{Int, Nothing} = nothing, last_year::Int = model_years[end], prtp::Float64 = 0.015, eta=1.45)
+function compute_scc(m::Model=get_model(); 
+    year::Union{Int, Nothing} = nothing, 
+    last_year::Int = model_years[end], 
+    prtp::Float64 = 0.015, 
+    eta::Float64=1.45, 
+    n::Union{Int, Nothing}=nothing, 
+    seed::Union{Int, Nothing}=nothing, 
+    trials_output_filename::Union{String, Nothing}=nothing)
+
     year === nothing ? error("Must specify an emission year. Try `compute_scc(m, year=2020)`.") : nothing
     !(last_year in model_years) ? error("Invalid value of $last_year for last_year. last_year must be within the model's time index $model_years.") : nothing
     !(year in model_years[1]:5:last_year) ? error("Cannot compute the scc for year $year, year must be within the model's time index $(model_years[1]):5:$last_year.") : nothing
 
-    mm = get_marginal_model(m; year = year)
+    ntimesteps = findfirst(isequal(last_year), model_years)     # Will run through the timestep of the specified last_year 
 
-    return _compute_scc(mm, year=year, last_year=last_year, prtp=prtp, eta=eta)
+    mm = get_marginal_model(m; year = year)
+    run(mm, ntimesteps=ntimesteps)
+
+    return _compute_scc(mm, year=year, last_year=last_year, prtp=prtp, eta=eta, n=n, seed=seed, trials_output_filename=trials_output_filename)
 end
 
 """
-compute_scc_mm(m::Model=get_model(); year::Int = nothing, last_year::Int = 2510, prtp::Float64 = 0.03)
+    compute_scc_mm(m::Model=get_model(); 
+        year::Union{Int, Nothing} = nothing, 
+        last_year::Int = model_years[end], 
+        prtp::Float64 = 0.015, 
+        eta::Float64=1.45, 
+        n::Union{Int, Nothing}=nothing, 
+        seed::Union{Int, Nothing}=nothing, 
+        trials_output_filename::Union{String, Nothing}=nothing)
 
 Returns a NamedTuple (scc=scc, mm=mm) of the social cost of carbon and the MarginalModel used to compute it.
 Computes the social cost of CO2 for an emissions pulse in `year` for the provided MimiDICE2016 model. 
 If no model is provided, the default model from MimiDICE2016.get_model() is used.
-Constant discounting is used from the specified pure rate of time preference `prtp`.
+
+The discounting scheme can be specified by the `eta` and `prtp` parameters. If no values are provided, default
+values of 1.45 and 0.015 will be used.
+
+By default, `n = nothing`, and a single value for the "best guess" social cost of CO2 is returned. If a positive 
+value for keyword `n` is specified, then a Monte Carlo simulation with sample size `n` will run, sampling from 
+all of DICE2016's random variables, and a vector of `n` social cost values will be returned.
+Optionally providing a CSV file path to `trials_output_filename` will save all of the sampled trial data as a CSV file.
+Optionally providing a `seed` value will set the random seed before running the simulation, allowing the 
+results to be replicated.
 """
-function compute_scc_mm(m::Model=get_model(); year::Union{Int, Nothing} = nothing, last_year::Int = model_years[end], prtp::Float64 = 0.015, eta=1.45)
+function compute_scc_mm(m::Model=get_model(); 
+    year::Union{Int, Nothing} = nothing, 
+    last_year::Int = model_years[end], 
+    prtp::Float64 = 0.015, 
+    eta::Float64=1.45, 
+    n::Union{Int, Nothing}=nothing, 
+    seed::Union{Int, Nothing}=nothing, 
+    trials_output_filename::Union{String, Nothing}=nothing)
+
     year === nothing ? error("Must specify an emission year. Try `compute_scc_mm(m, year=2020)`.") : nothing
     !(last_year in model_years) ? error("Invalid value of $last_year for last_year. last_year must be within the model's time index $model_years.") : nothing
     !(year in model_years[1]:5:last_year) ? error("Cannot compute the scc for year $year, year must be within the model's time index $(model_years[1]):5:$last_year.") : nothing
 
+    ntimesteps = findfirst(isequal(last_year), model_years)     # Will run through the timestep of the specified last_year 
+
     mm = get_marginal_model(m; year = year)
-    scc = _compute_scc(mm; year=year, last_year=last_year, prtp=prtp, eta=eta)
+    run(mm, ntimesteps=ntimesteps)
+    scc = _compute_scc(mm; year=year, last_year=last_year, prtp=prtp, eta=eta, n=n, seed=seed, trials_output_filename=trials_output_filename)
     
     return (scc = scc, mm = mm)
 end
 
-# helper function for computing SCC from a MarginalModel, not to be exported or advertised to users
-function _compute_scc(mm::MarginalModel; year::Int, last_year::Int, prtp::Float64, eta::Float64)
+# helper function for computing SCC from a MarginalModel that has already been run, not to be exported or advertised to users
+function _compute_scc(mm::MarginalModel; year::Int, last_year::Int, prtp::Float64, eta::Float64, n::Union{Int, Nothing}=nothing, seed::Union{Int, Nothing}=nothing, trials_output_filename::Union{String, Nothing}=nothing)
+    
     ntimesteps = findfirst(isequal(last_year), model_years)     # Will run through the timestep of the specified last_year 
-    run(mm, ntimesteps=ntimesteps)
 
-    marginal_damages = -1 * mm[:neteconomy, :C][1:ntimesteps] * 1e12     # Go from trillion$ to $; multiply by -1 so that damages are positive; pulse was in CO2 so we don't need to multiply by 12/44
+    if n === nothing
 
-    cpc = mm.base[:neteconomy, :CPC]
+        marginal_damages = -1 * mm[:neteconomy, :C][1:ntimesteps] * 1e12     # Go from trillion$ to $; multiply by -1 so that damages are positive; pulse was in CO2 so we don't need to multiply by 12/44
 
-    year_index = findfirst(isequal(year), model_years)
+        cpc = mm.base[:neteconomy, :CPC]
 
-    df = [zeros(year_index-1)..., ((cpc[year_index]/cpc[i])^eta * 1/(1+prtp)^(t-year) for (i,t) in enumerate(model_years) if year<=t<=last_year)...]
-    scc = sum(df .* marginal_damages * 5)  # currently implemented as a 5year step function; so each timestep of discounted marginal damages is multiplied by 5
+        year_index = findfirst(isequal(year), model_years)
+
+        df = [zeros(year_index-1)..., ((cpc[year_index]/cpc[i])^eta * 1/(1+prtp)^(t-year) for (i,t) in enumerate(model_years) if year<=t<=last_year)...]
+        scc = sum(df .* marginal_damages * 5)  # currently implemented as a 5year step function; so each timestep of discounted marginal damages is multiplied by 5
+        
+    elseif n < 1
+        error("Invalid n = $n. Number of trials must be a positive integer.")
+    else
+        # Run a Monte Carlo simulation
+        simdef = get_mcs()
+        payload = (Vector{Float64}(undef, n), year, last_year, eta, prtp)
+        Mimi.set_payload!(simdef, payload)
+        seed !== nothing ? Random.seed!(seed) : nothing
+        update_param!(mm.base, :cap_damages, true)
+        update_param!(mm.base, :cap_abatecost, true)
+        update_param!(mm.marginal, :cap_damages, true)
+        update_param!(mm.marginal, :cap_abatecost, true)
+        si = run(simdef, mm, n, ntimesteps = ntimesteps, post_trial_func = _dice_scc_post_trial, trials_output_filename = trials_output_filename)
+        scc = Mimi.payload(si)[1]
+    end
+    
     return scc
+end
+
+# Post trial function used for computing SCC during Monte Carlo simulation
+function _dice_scc_post_trial(sim::SimulationInstance, trialnum::Int, ntimesteps::Int, tup::Union{Tuple, Nothing})
+    mm = sim.models[1]  # get the already-run MarginalModel
+    (scc_results, year, last_year, eta, prtp) = Mimi.payload(sim)  # unpack the payload information
+    scc = _compute_scc(mm, year = year, last_year = last_year, eta = eta, prtp = prtp)
+    scc_results[trialnum] = scc
 end
 
 """
