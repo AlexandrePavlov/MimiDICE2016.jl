@@ -5,6 +5,8 @@ using Test
 @testset "MCS" begin
 
 m = MimiDICE2016.get_model()
+update_param!(m, :cap_damages, true)
+update_param!(m, :cap_abatecost, true)
 mcs = MimiDICE2016.get_mcs()
 sim_inst = run(mcs, m, 1000)
 
