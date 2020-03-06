@@ -7,6 +7,7 @@ version = "0.1.0"
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 ExcelReaders = "c04bee98-12a5-510c-87df-2a230cb6e075"
 Mimi = "e4e893b0-ee5e-52ea-8111-44b3bdec128c"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 
 [compat]
 Mimi = "0.9"
