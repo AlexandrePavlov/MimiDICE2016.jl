@@ -19,7 +19,12 @@
     YGROSS      = Parameter(index=[time])   #Gross world product GROSS of abatement and damages (trillions 2010 USD per year)
     expcost2    = Parameter()               #Exponent of control cost function
 	pback		= Parameter()				#Cost of backstop 2010$ per tCO2 2015
-	gback		= Parameter()				#Initial cost decline backstop cost per period
+    gback		= Parameter()				#Initial cost decline backstop cost per period
+
+    # Optional Boolean flags added in Mimi version to prevent consumption from being negative in extreme runs of the model.
+    #   Defaults are false to reflect original Nordhaus code.
+    cap_damages::Bool = Parameter(default = false)     # If true, YNET will be constrained as non-negative (YNET = YGROSS - DAMAGES)
+    cap_abatecost::Bool = Parameter(default = false)   # If true, Y will be constrained as non-negative (Y = YNET - ABATECOST) 
 
     function run_timestep(p, v, d, t)
 		#Define function for PBACKTIME
@@ -33,7 +38,11 @@
 		v.COST1[t] = v.PBACKTIME[t] * p.SIGMA[t] / p.expcost2 / 1000
 		
         #Define function for YNET
-        v.YNET[t] = p.YGROSS[t] - p.DAMAGES[t]
+        if p.cap_damages
+            v.YNET[t] = max(p.YGROSS[t] - p.DAMAGES[t], 0)
+        else
+            v.YNET[t] = p.YGROSS[t] - p.DAMAGES[t]
+        end
     
         #Define function for ABATECOST
         v.ABATECOST[t] = p.YGROSS[t] * v.COST1[t] * (p.MIU[t]^p.expcost2)
@@ -42,16 +51,20 @@
         v.MCABATE[t] = v.PBACKTIME[t] * p.MIU[t]^(p.expcost2 - 1)
     
         #Define function for Y
-        v.Y[t] = v.YNET[t] - v.ABATECOST[t]
+        if p.cap_abatecost
+            v.Y[t] = max(v.YNET[t] - v.ABATECOST[t], 0)
+        else
+            v.Y[t] = v.YNET[t] - v.ABATECOST[t]
+        end
     
         #Define function for I
         v.I[t] = p.S[t] * v.Y[t]
     
         #Define function for C
-        v.C[t] = v.Y[t] - v.I[t]
+        v.C[t] = max(v.Y[t] - v.I[t], 2)
     
         #Define function for CPC
-        v.CPC[t] = 1000 * v.C[t] / p.l[t]
+        v.CPC[t] = max(1000 * v.C[t] / p.l[t], 0.01)
     
         #Define function for CPRICE (equation from GAMS version of DICE2016)
         v.CPRICE[t] = v.PBACKTIME[t] * (p.MIU[t]^(p.expcost2 - 1))

@@ -1,5 +1,4 @@
 @defcomp emissions begin
-	SIG0	= Variable()				#Carbon intensity 2010-2015 (kgCO2 per output 2010 USD)
 	GSIG	= Variable(index=[time])	#Change in sigma (cumulative improvement of energy efficiency)
 	SIGMA	= Variable(index=[time])	#CO2-equivalent-emissions output ratio
     EIND    = Variable(index=[time])    #Industrial emissions (GtCO2 per year)
@@ -9,6 +8,7 @@
     CCA     = Variable(index=[time])    #Cumulative industrial emissions
 	CCATOT	= Variable(index=[time])	#Cumulative total carbon emissions
 
+	sig0	= Parameter()				#Carbon intensity 2010-2015 (kgCO2 per output 2010 USD)
 	gsigma1 = Parameter()				#Initial growth of sigma (per year)
 	dsig	= Parameter()				#Decline rate of decarbonization (per period)
 	eland0	= Parameter()				#Carbon emissions from land 2015 (GtCO2 per year)
@@ -20,8 +20,6 @@
 	cumetree0=Parameter()				#Initial emissions from deforestation (see GAMS code)
 
     function run_timestep(p, v, d, t)
-		#Define SIG0
-			v.SIG0 = p.e0/(p.YGROSS[1] * (1 - p.MIU[1]))
 			
 		#Define function for GSIG
 		if is_first(t)
@@ -32,7 +30,7 @@
 		
 		#Define function for SIGMA
 		if is_first(t)
-			v.SIGMA[t] = v.SIG0
+			v.SIGMA[t] = p.sig0
 		else
 			v.SIGMA[t] = v.SIGMA[t-1] * exp(v.GSIG[t-1] * 5)
 		end
@@ -65,7 +63,7 @@
         end
 			
 		#Define function for CCATOT
-			v.CCATOT[t] = v.CCA[t] + v.CUMETREE[t]			
+		v.CCATOT[t] = v.CCA[t] + v.CUMETREE[t]			
 
     end
 end
