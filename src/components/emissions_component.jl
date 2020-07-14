@@ -21,7 +21,7 @@
 
     function run_timestep(p, v, d, t)
 		#Define SIG0
-			v.SIG0 = p.e0/(p.YGROSS[1] * (1 - p.MIU[1]))
+			v.SIG0 = p.e0/(p.YGROSS[TimestepIndex(1)] * (1 - p.MIU[TimestepIndex(1)]))
 			
 		#Define function for GSIG
 		if is_first(t)

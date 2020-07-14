@@ -12,7 +12,7 @@
 		#Define function for FORCOTH
 		if is_first(t)
 			v.FORCOTH[t] = p.fex0
-		elseif gettime(t) < 2105
+		elseif t < TimestepValue(2105)
 			v.FORCOTH[t] = v.FORCOTH[t - 1] + (1/17) * (p.fex1 - p.fex0)
 		else
 			v.FORCOTH[t] = p.fex1
