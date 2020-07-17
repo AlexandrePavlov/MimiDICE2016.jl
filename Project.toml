@@ -9,7 +9,7 @@ Mimi = "e4e893b0-ee5e-52ea-8111-44b3bdec128c"
 
 [compat]
 julia = "1.4"
-Mimi = "0.10"
+Mimi = "0.10, 1"
 ExcelReaders = "0.11"
 
 [extras]
