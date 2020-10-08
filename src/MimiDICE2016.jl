@@ -48,7 +48,17 @@ function constructdice(params)
     # Socioeconomics
     connect_param!(m, :grosseconomy, :AL, :totalfactorproductivity, :AL)
     connect_param!(m, :grosseconomy, :I, :neteconomy, :I)
-    connect_param!(m, :emissions, :YGROSS, :grosseconomy, :YGROSS)
+
+    # EMISSIONS COMPONENT
+    set_param!(m, :emissions, :sig0, p[:sig0])
+    set_param!(m, :emissions, :gsigma1, p[:gsigma1])
+    set_param!(m, :emissions, :dsig, p[:dsig])
+	set_param!(m, :emissions, :eland0, p[:eland0])
+	set_param!(m, :emissions, :deland, p[:deland])
+	set_param!(m, :emissions, :e0, p[:e0])
+    set_param!(m, :emissions, :MIU, p[:MIU])
+    set_param!(m, :emissions, :cca0, p[:cca0])
+	set_param!(m, :emissions, :cumetree0, p[:cumetree0])
 
     # Climate
     connect_param!(m, :co2cycle, :E, :emissions, :E)
@@ -61,7 +71,14 @@ function constructdice(params)
     connect_param!(m, :neteconomy, :YGROSS, :grosseconomy, :YGROSS)
     connect_param!(m, :neteconomy, :DAMAGES, :damages, :DAMAGES)
 	connect_param!(m, :neteconomy, :SIGMA, :emissions, :SIGMA)
-    connect_param!(m, :welfare, :CPC, :neteconomy, :CPC)
+
+    # WELFARE COMPONENT
+    set_param!(m, :welfare, :l, p[:l])
+    set_param!(m, :welfare, :elasmu, p[:elasmu])
+    set_param!(m, :welfare, :prtp, p[:prtp])
+    set_param!(m, :welfare, :ndgr, p[:ndgr])
+    set_param!(m, :welfare, :scale1, p[:scale1])
+    set_param!(m, :welfare, :scale2, p[:scale2])
 
     #--------------------------------------------------------------------------
     # Set external parameter values 

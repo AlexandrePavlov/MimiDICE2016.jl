@@ -49,10 +49,12 @@ function getdice2016excelparameters(filename)
     p[:mu0]         = getparams(f, "B62:B62", :single, "Base", 1)       #Initial Concentration in biosphere/shallow oceans 2010 (GtC)
 	p[:mueq]		= getparams(f, "B83:B83", :single, "Parameters", 1) #Equilibrium concentration in upper strata (GtC)
     p[:pback]	    = getparams(f, "B10:B10", :single, "Parameters", 1) #Cost of backstop 2010$ per tCO2 2015
-    p[:rr]          = getparams(f, "B18:CW18", :all, "Base", T)         #Social Time Preference Factor
+    p[:prtp]        = getparams(f, "B16:B16", :single, "Base", 1)       #Time premium per year
+    p[:ndgr]        = getparams(f, "B17:B17", :single, "Base", 1)       #Non-diversifiable global risk (percent per year) 
     p[:S]           = getparams(f, "B131:CW131", :all, "Base", T)       #Optimized savings rate (fraction of gross output) results from DICE2016 (base case)
     p[:scale1]      = getparams(f, "B49:B49", :single, "Base", 1)       #Multiplicative scaling coefficient
     p[:scale2]      = getparams(f, "B50:B50", :single, "Base", 1)       #Additive scaling coefficient
+    p[:sig0]        = getparams(f, "B42:B42", :single, "Base", 1)       #Carbon intensity 2010-2015 (kgCO2 per output 2010 USD)
     p[:t2xco2]      = getparams(f, "B79:B79", :single, "Base", 1)       #Equilibrium temp impact (oC per doubling CO2)
     p[:tatm0]       = getparams(f, "B76:B76", :single, "Base", 1)       #Initial atmospheric temp change 2015 (C from 1940-60)
     p[:tocean0]     = getparams(f, "B77:B77", :single, "Base", 1)       #Initial temperature of deep oceans (deg C above 1940-60)
