@@ -1,4 +1,4 @@
-using ExcelReaders
+using XLSX: readxlsx
 
 function getdice2016excelparameters(filename)
     p = Dict{Symbol,Any}()
@@ -6,7 +6,7 @@ function getdice2016excelparameters(filename)
     T = 100
 
     #Open DICE_2016 Excel File to Read Parameters
-    f = openxl(filename)
+    f = readxlsx(filename)
 
 	p[:a0]			= getparams(f, "B108:B108", :single, "Parameters",1)#Initial level of total factor productivity
     p[:a1]          = getparams(f, "B25:B25", :single, "Base", 1)       #Damage coefficient on temperature
@@ -66,7 +66,7 @@ function getdice2016gamsparameters(filename)
     T = 100
 
     #Open DICE_2016 Excel File to Read Parameters
-    f = openxl(filename)
+    f = readxlsx(filename)
     sheet = "DICE2016_Base"
 
 	p[:a0]			= 5.115											   #Initial level of total factor productivity

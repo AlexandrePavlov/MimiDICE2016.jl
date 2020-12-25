@@ -23,11 +23,11 @@ end
 function getparams(f, range::String, parameters::Symbol, sheet::String, T)
 
     if parameters == :single
-        data = readxl(f, "$(sheet)!$(range)")
+        data = f[sheet][range]
         vals = Float64(data[1])
 
     elseif parameters == :all
-        data = readxl(f, "$(sheet)!$(range)")
+        data = f[sheet][range]
         s = size(data)
 
         if length(s) == 2 && s[1] == 1
