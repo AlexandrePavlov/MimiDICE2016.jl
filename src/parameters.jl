@@ -42,10 +42,10 @@ function getdice2016excelparameters(filename)
     p[:k0]          = getparams(f, "B12:B12", :single, "Base", 1)       #Initial capital
     p[:l]           = getparams(f, "B53:CW53", :all, "Base", T)         #Level of population and labor (millions)
     p[:mat0]        = getparams(f, "B61:B61", :single, "Base", 1)       #Initial Concentration in atmosphere in 2015 (GtC)
-	p[:mateq]		= getparams(f, "B82, B82", :single, "Parameters", 1)#Equilibrium concentration atmosphere  (GtC)
+	p[:mateq]		= getparams(f, "B82:B82", :single, "Parameters", 1)#Equilibrium concentration atmosphere  (GtC)
     p[:MIU]         = getparams(f, "B135:CW135", :all, "Base", T)       #Optimized emission control rate results from DICE2016R (base case)
     p[:ml0]         = getparams(f, "B63:B63", :single, "Base", 1)       #Initial Concentration in deep oceans 2010 (GtC)
-	p[:mleq]		= getparams(f, "B84, B84", :single, "Parameters", 1)#Equilibrium concentration in lower strata (GtC)
+	p[:mleq]		= getparams(f, "B84:B84", :single, "Parameters", 1)#Equilibrium concentration in lower strata (GtC)
     p[:mu0]         = getparams(f, "B62:B62", :single, "Base", 1)       #Initial Concentration in biosphere/shallow oceans 2010 (GtC)
 	p[:mueq]		= getparams(f, "B83:B83", :single, "Parameters", 1) #Equilibrium concentration in upper strata (GtC)
     p[:pback]	    = getparams(f, "B10:B10", :single, "Parameters", 1) #Cost of backstop 2010$ per tCO2 2015
@@ -60,6 +60,11 @@ function getdice2016excelparameters(filename)
     return p
 end
 
+# TODO: 
+# (1) there is no "Parameters" sheet in the .xlsx parameters file, so we get 
+# errors here
+# (2) there is no method for getparams(f, ::Number) so that errors too (ie. damadj)
+
 function getdice2016gamsparameters(filename)
     p = Dict{Symbol,Any}()
 
@@ -73,7 +78,7 @@ function getdice2016gamsparameters(filename)
     p[:a1]          = getparams(f, "B41:B41", :single, sheet, 1)       #Damage coefficient on temperature
     p[:a2]          = getparams(f, "B42:B42", :single, sheet, 1)       #Damage quadratic term
     p[:a3]          = getparams(f, "B43:B43", :single, sheet, 1)       #Damage exponent
-    p[:al]          = getparams(f, "B5:CWI5", :all, sheet, T)          #Level of total factor productivity
+    p[:al]          = getparams(f, "B5:CW5", :all, sheet, T)          #Level of total factor productivity
     p[:b12]         = getparams(f, "B20:B20", :single, sheet, 1)       #Carbon cycle transition matrix atmosphere to shallow ocean
     p[:b23]         = getparams(f, "B21:B21", :single, sheet, 1)       #Carbon cycle transition matrix shallow to deep ocean
     p[:c1]          = getparams(f, "B36:B36", :single, sheet, 1)       #Speed of adjustment parameter for atmospheric temperature (per 5 years)
@@ -102,12 +107,12 @@ function getdice2016gamsparameters(filename)
     p[:k0]          = getparams(f, "B9:B9", :single, sheet, 1)         #Initial capital
     p[:l]           = getparams(f, "B6:CW6", :all, sheet, T)           #Level of population and labor (millions)
     p[:mat0]        = getparams(f, "B17:B17", :single, sheet, 1)       #Initial Concentration in atmosphere in 2015 (GtC)
-	p[:mateq]		= getparams(f, "B82, B82", :single, "Parameters",1)#Equilibrium concentration atmosphere  (GtC)
+	p[:mateq]		= getparams(f, "B82:B82", :single, "Parameters",1)#Equilibrium concentration atmosphere  (GtC)
     p[:MIU]         = getparams(f, "B47:CW47", :all, sheet, T)         #Optimized emission control rate results from DICE2016R (base case)
     p[:ml0]         = getparams(f, "B19:B19", :single, sheet, 1)       #Initial Concentration in deep oceans 2015 (GtC)
-	p[:mleq]		= getparams(f, "B84, B84", :single, "Parameters",1)#Equilibrium concentration in lower strata (GtC)
+	p[:mleq]		= getparams(f, "B84:B84", :single, "Parameters",1)#Equilibrium concentration in lower strata (GtC)
     p[:mu0]         = getparams(f, "B18:B18", :single, sheet, 1)       #Initial Concentration in biosphere/shallow oceans 2015 (GtC)
-	p[:mueq]		= getparams(f, "B83:B83", :single, "Parameters", 1)#Equilibrium concentration in upper strata (GtC)
+    p[:mueq]		= getparams(f, "B83:B83", :single, "Parameters", 1)#Equilibrium concentration in upper strata (GtC)
     p[:partfract]   = getparams(f, "B49:CW49", :all, sheet, T)         #Fraction of emissions in control regime
     p[:pback]	    = 550											   #Cost of backstop 2010$ per tCO2 2015
     p[:rr]          = getparams(f, "B55:CW55", :all, sheet, T)         #Social Time Preference Factor
