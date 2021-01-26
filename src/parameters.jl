@@ -60,11 +60,6 @@ function getdice2016excelparameters(filename)
     return p
 end
 
-# TODO: 
-# (1) there is no "Parameters" sheet in the .xlsx parameters file, so we get 
-# errors here
-# (2) there is no method for getparams(f, ::Number) so that errors too (ie. damadj)
-
 function getdice2016gamsparameters(gamsfilename, excelfilename)
     p = Dict{Symbol,Any}()
 
