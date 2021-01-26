@@ -82,8 +82,8 @@ function getdiceexcel(;datafile = joinpath(dirname(@__FILE__), "..", "data", "DI
     return m
 end
 
-function getdicegams(;datafile = joinpath(dirname(@__FILE__), "..", "data", "DICE2016_IAMF_Parameters.xlsx"))
-    params = getdice2016gamsparameters(datafile)
+function getdicegams(;gamsdatafile = joinpath(dirname(@__FILE__), "..", "data", "DICE2016_IAMF_Parameters.xlsx"), exceldatafile = joinpath(dirname(@__FILE__), "..", "data", "DICE2016R-090916ap-v2.xlsm"))
+    params = getdice2016gamsparameters(gamsdatafile, exceldatafile)
 
     m = constructdice(params)
 
