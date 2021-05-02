@@ -1,4 +1,6 @@
 # MimiDICE2016
+
+**Note** this is an implementation of DICE2016R, not DICE2016R2, and it is based on the Excel version 090916 available on the website of William Nordhaus
  
 ## Software Requirements
 
