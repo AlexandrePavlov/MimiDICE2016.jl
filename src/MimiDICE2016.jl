@@ -18,6 +18,9 @@ include("components/damages_component.jl")
 include("components/neteconomy_component.jl")
 include("components/welfare_component.jl")
 
+# Code for other GHG SC
+include("core/DICE_other_ghg.jl")
+
 export constructdice, getdiceexcel
 
 const model_years = 2015:5:2510
