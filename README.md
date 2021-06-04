@@ -1,4 +1,6 @@
 # MimiDICE2016
+
+**Note** this is an implementation of DICE2016R, not DICE2016R2, and it is based on the Excel version 090916 available on the website of William Nordhaus
  
 ## Software Requirements
 
@@ -9,7 +11,7 @@ You need to install [Julia 1.1.0](https://julialang.org) or newer to run this mo
 To install MimiDICE2016.jl, you need to run the following command at the julia package REPL:
 
 ```julia
-pkg> add MimiDICE2016
+pkg> add https://github.com/AlexandrePavlov/MimiDICE2016.jl
 ```
 
 You probably also want to install the Mimi package into your julia environment, so that you can use some of the tools in there:
