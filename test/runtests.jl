@@ -2,7 +2,7 @@ using Test
 using XLSX: readxlsx
 using DataFrames
 using Mimi
-using MimiDICE2016
+# using MimiDICE2016
 using CSVFiles
 
 using MimiDICE2016: getparams
@@ -101,7 +101,7 @@ using MimiDICE2016: getparams
 
         # Test with a modified model 
         m = MimiDICE2016.get_model()
-        update_param!(m, :t2xco2, 5)    
+        update_param!(m, :climatedynamics, :t2xco2, 5)    
         scc4 = MimiDICE2016.compute_scc(m, year=2020)
         @test scc4 > scc1   # Test that a higher value of climate sensitivty makes the SCC bigger
 
