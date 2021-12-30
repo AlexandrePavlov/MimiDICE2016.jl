@@ -1,7 +1,7 @@
 name = "MimiDICE2016"
 uuid = "ab869bb0-c23d-11e9-310e-47ac58ee0562"
 authors = ["AlexandrePavlov <54249238+AlexandrePavlov@users.noreply.github.com>"]
-version = "0.3.0"
+version = "0.3.1-DEV"
 
 [deps]
 XLSX = "fdbf4ff8-1666-58a4-91e7-1b58723a45e0"
