@@ -2,7 +2,7 @@ using Test
 using XLSX: readxlsx
 using DataFrames
 using Mimi
-# using MimiDICE2016
+using MimiDICE2016
 using CSVFiles
 
 using MimiDICE2016: getparams
